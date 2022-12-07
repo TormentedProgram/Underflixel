@@ -32,27 +32,27 @@ class PlayState extends FlxState
 	{
 		super.create();
 		FlxG.mouse.visible = false;
+		FlxG.worldBounds.set(-5000, -5000, 10000, 10000);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
-
 		camGame.zoom = 0.7;
-		camHUD.zoom = 1;
+		camHUD.zoom = 0.7;
 		camOther.zoom = 1;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
-		
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
-
+		
 		levelCollision = new FlxGroup();
 		playerCollision = new FlxGroup();
-
-		FlxG.worldBounds.set(-5000, -5000, 10000, 10000);
+		luaDebugGroup = new FlxTypedGroup<DebugLuaText>();
+		luaDebugGroup.cameras = [camOther];
+		add(luaDebugGroup);
 
 		var lvl1:Level1 = new Level1('map');
 		lvl1.cameras = [camGame];
@@ -61,14 +61,10 @@ class PlayState extends FlxState
 		var lvl1_c:Level1 = new Level1('collision');
 		levelCollision.add(lvl1_c);
 
-		frisk = new Player(-163, 201, 0.4, 250, 'frisk');
+		frisk = new Player(-133, 201, 0.4, 250, 'frisk');
 		playerCollision.add(frisk);
 		frisk.cameras = [camGame];
 		add(frisk);
-
-		luaDebugGroup = new FlxTypedGroup<DebugLuaText>();
-		luaDebugGroup.cameras = [camOther];
-		add(luaDebugGroup);
 
 		FlxG.camera.follow(frisk, TOPDOWN);
 	}
@@ -82,9 +78,9 @@ class PlayState extends FlxState
 		}
 		#end
 
-		super.update(elapsed);
-
 		FlxG.collide(playerCollision, levelCollision);
+
+		super.update(elapsed);
 	}
 
 	public function debugPrint(text:String, color:FlxColor) {
