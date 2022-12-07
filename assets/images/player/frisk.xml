@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="frisk.png">
+	<!-- Created with Adobe Animate version 21.0.4.39603 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="down0000" x="10" y="10" width="157" height="242"/>
+	<SubTexture name="down0001" x="177" y="10" width="157" height="242"/>
+	<SubTexture name="down0002" x="344" y="10" width="157" height="242"/>
+	<SubTexture name="down0003" x="177" y="10" width="157" height="242"/>
+	<SubTexture name="side0000" x="511" y="10" width="141" height="242"/>
+	<SubTexture name="side0001" x="662" y="10" width="141" height="242"/>
+	<SubTexture name="up0000" x="813" y="10" width="157" height="242"/>
+	<SubTexture name="up0001" x="10" y="262" width="157" height="242"/>
+	<SubTexture name="up0002" x="177" y="262" width="157" height="242"/>
+	<SubTexture name="up0003" x="10" y="262" width="157" height="242"/>
+</TextureAtlas>
