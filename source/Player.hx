@@ -14,6 +14,7 @@ class Player extends FlxSprite
     var SPEED:Float = 0;
 
     public static var playAnimation:Bool = true;
+    public static var movement:Bool = true;
     public static var walkSpeed:Float = 0;
 
     public function new(x:Float, y:Float, scale:Float, characterSpeed:Float, skin:String)
@@ -54,7 +55,7 @@ class Player extends FlxSprite
         var leftJustPressed = FlxG.keys.justReleased.LEFT;
         var rightJustPressed = FlxG.keys.justReleased.RIGHT;
 
-        if(!playAnimation) {
+        if(!playAnimation || !movement) {
             velocity.x = 0;
             velocity.y = 0;
         }
@@ -73,7 +74,7 @@ class Player extends FlxSprite
 
         walking = false;
 
-        if (goDown)
+        if (goDown && movement)
         {
             velocity.y = SPEED;
             if(!goLeft && !goRight && playAnimation) {
@@ -82,7 +83,7 @@ class Player extends FlxSprite
             flipX = false;
             walking = true;
         }
-        if (goUp)
+        if (goUp && movement)
         {
             velocity.y = -SPEED;
             if(!goLeft && !goRight && playAnimation) {
@@ -91,7 +92,7 @@ class Player extends FlxSprite
             }
             walking = true;
         }
-        if (goRight)
+        if (goRight && movement)
         {
             velocity.x = SPEED;
             if(playAnimation) {
@@ -101,7 +102,7 @@ class Player extends FlxSprite
             walking = true;
         }
 
-        if (goLeft)
+        if (goLeft && movement)
         {
             velocity.x = -SPEED;
             if(playAnimation) {
@@ -111,22 +112,22 @@ class Player extends FlxSprite
             walking = true;
         }
 
-        if (walking == false && (upJustPressed)  && playAnimation)
+        if (walking == false && (upJustPressed)  && playAnimation && movement)
         {
             animation.play('idle-up');
             flipX = false;
         }
-        if (walking == false && (downJustPressed) && playAnimation)
+        if (walking == false && (downJustPressed) && playAnimation && movement)
         {
             animation.play('idle-down');
             flipX = false;
         }
-        if (walking == false && (leftJustPressed)  && playAnimation)
+        if (walking == false && (leftJustPressed)  && playAnimation && movement)
         {
             animation.play('idle-side');
             flipX = true;
         }
-        if (walking == false && (rightJustPressed) && playAnimation)
+        if (walking == false && (rightJustPressed) && playAnimation && movement)
         {
             animation.play('idle-side');
             flipX = false;

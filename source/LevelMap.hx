@@ -99,7 +99,7 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 			playDialogue('papyrus','default','its not done sans.', 0.05);
 		}	
 		if (interact && dialogueLine_1 == 4 && dialogueActive_1) {
-			Player.walkSpeed = PlayState.defaultSpeed;
+			Player.movement = true;
 			Player.playAnimation = true;
 			dialogue_1 = false;
 			Dialogue.removeDialogue();
@@ -109,7 +109,7 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 	}
 
 	public function playDialogue(character:String, mood:String, text:String, speed:Float) {
-		Player.walkSpeed = 0;
+		Player.movement = false;
 		Player.playAnimation = false;
 		var currentDialog:Dialogue = new Dialogue(character, mood, '* ' + text, speed);
 		add(currentDialog);

@@ -23,6 +23,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	public static var dialog_text:FlxTypeText;
 	public static var speed:Float;
 	public static var character:String = null;
+	public static var stopTalking:FlxTimer;
 
 	public function new(character:String, mood:String, text:String, speed:Float)
 	{
@@ -42,7 +43,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		head.cameras = [PlayState.camHUD];
 		add(head);
 
-		new FlxTimer().start(speed * text.length, function(tmr:FlxTimer)
+		stopTalking = new FlxTimer().start(speed * text.length, function(tmr:FlxTimer)
 			{
 				head.animation.play('idle');
 			});
@@ -68,6 +69,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	}
 
 	public static function removeDialogue() {
+		stopTalking.cancel();
 		dialog_box.destroy();
 		dialog_text.destroy();
 		head.destroy();
