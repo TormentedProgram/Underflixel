@@ -13,7 +13,8 @@ import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import EditorState;
-
+import flixel.util.FlxSave;
+import ClientPrefs;
 import flixel.addons.text.FlxTypeText;
 
 class PlayState extends FlxState
@@ -31,6 +32,9 @@ class PlayState extends FlxState
 	override public function create()
 	{
 		super.create();
+
+		ClientPrefs.loadPrefs();
+
 		FlxG.mouse.visible = false;
 		FlxG.worldBounds.set(-5000, -5000, 10000, 10000);
 
@@ -75,6 +79,9 @@ class PlayState extends FlxState
 		FlxG.watch.addMouse();
 		if (FlxG.keys.justPressed.SEVEN) {
 			FlxG.switchState(new EditorState());
+		}
+		if (FlxG.keys.justPressed.ESCAPE) {
+			FlxG.switchState(new OptionsState());
 		}
 		#end
 
