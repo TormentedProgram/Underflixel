@@ -16,6 +16,7 @@ import EditorState;
 import flixel.util.FlxSave;
 import ClientPrefs;
 import flixel.addons.text.FlxTypeText;
+import openfl.filters.ShaderFilter;
 
 class PlayState extends FlxState
 {

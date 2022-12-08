@@ -70,7 +70,7 @@ class EditorState extends FlxState
 
 		FlxG.worldBounds.set(-5000, -5000, 10000, 10000);
 
-		var land:FlxSprite = new FlxSprite(100, 100).loadGraphic(Paths.image('images/editor/map'));
+		var land:FlxSprite = new FlxSprite(100, 100).loadGraphic(Paths.image('images/editor/editormap'));
 		land.antialiasing = false;
 		land.setGraphicSize(Std.int(land.width * 3));
 		add(land);
@@ -83,7 +83,7 @@ class EditorState extends FlxState
 		visual.alpha = 0.6;
 		add(visual);
 
-		var saveButton:FlxButton = new FlxButton(50, 50, "Save to File", OnClickButton);
+		var saveButton:FlxButton = new FlxButton(50, 50, "Save File", OnClickButton);
 		saveButton.cameras = [camHUD];
         add(saveButton);
 

@@ -1,6 +1,5 @@
 package;
 
-import Dialogue;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
@@ -13,9 +12,9 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
+import Dialogue;
 import Player;
 import PlayState;
-import flixel.math.FlxMath;
 
 class Level1 extends FlxTypedGroup<FlxBasic>
 {
