@@ -15,6 +15,7 @@ import flixel.util.FlxColor;
 import flixel.addons.text.FlxTypeText;
 import flixel.util.FlxTimer;
 import PlayState;
+import Player;
 
 class Dialogue extends FlxTypedGroup<FlxBasic>
 {
@@ -24,10 +25,18 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	public static var speed:Float;
 	public static var character:String = null;
 	public static var stopTalking:FlxTimer;
+    var lines:Array<String>;
+    var currentLine:Int;
 
-	public function new(character:String, mood:String, text:String, speed:Float)
+	public function new(character:String, mood:String, text:Array<String>, speed:Float)
 	{
 		super();
+
+		lines = text;
+        currentLine = 0;
+
+		Player.movement = false;
+		Player.playAnimation = false;
 
 		dialog_box = new FlxSprite(0, 375).loadGraphic(Paths.image('images/dialogue/box'));
 		dialog_box.scrollFactor.set();
@@ -43,12 +52,12 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		head.cameras = [PlayState.camHUD];
 		add(head);
 
-		stopTalking = new FlxTimer().start(speed * text.length, function(tmr:FlxTimer)
+		stopTalking = new FlxTimer().start(speed * lines[currentLine].length, function(tmr:FlxTimer)
 			{
-				head.animation.play('idle');
+				head.resetAnim();
 			});
 
-		dialog_text = new FlxTypeText(dialog_box.x + 100, dialog_box.y, FlxG.width - 30, text, 32, true);
+		dialog_text = new FlxTypeText(dialog_box.x + 100, dialog_box.y, FlxG.width - 30, lines[0], 32, true);
 		dialog_text.setFormat(Paths.font("fonts/" + character), 40);
 		dialog_text.bold = true;
 		dialog_text.scrollFactor.set();
@@ -60,18 +69,72 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 			FlxG.sound.load(Paths.sound('sounds/' + character)),
 		];
 		add(dialog_text);
+		dialog_text.start(null, true, false, null);
 	}
 
 	override function update(elapsed:Float)
 	{
-		//dialog_text.delay = speed;
+		if (FlxG.keys.anyJustPressed([Z, ENTER])) {
+			currentLine++;
+			trace(currentLine);
+			if(currentLine >= lines.length) {
+				removeDialogue();
+                currentLine = 0;
+            }
+			dialog_text.resetText(lines[currentLine]);
+			dialog_text.start(null, true, false, null);
+			head.startAnim();
+			stopTalking = new FlxTimer().start(speed * lines[currentLine].length, function(tmr:FlxTimer)
+				{
+					head.resetAnim();
+				});
+		}
 		super.update(elapsed);
+		dialog_text.update(elapsed);
 	}
 
-	public static function removeDialogue() {
-		stopTalking.cancel();
-		dialog_box.destroy();
-		dialog_text.destroy();
-		head.destroy();
+	function removeDialogue() {
+		currentLine = 0;
+		dialog_text.kill();
+		dialog_box.kill();
+		head.kill();
+
+		Player.movement = true;
+		Player.playAnimation = true;
 	}
+}
+
+class DialogHead extends FlxSprite
+{
+    public function new(x:Float, y:Float, scale:Float, frameRate:Int, character:String, mood:String)
+    {
+        super(x, y);
+
+        frames = Paths.getSparrowAtlas('images/dialogue/' + character + '/' + character + '-' + mood);
+        animation.addByPrefix('talk', 'talk0', frameRate, true);
+        animation.addByPrefix('idle', 'talk0003', frameRate, true);
+
+        setGraphicSize(Std.int(width * scale));
+        updateHitbox();
+        antialiasing = false;
+
+        animation.play('talk');
+    }
+
+    public function resetAnim() {
+        animation.play('idle');
+    }
+
+	public function startAnim() {
+        animation.play('talk');
+    }
+
+    override function update(elapsed:Float)
+    {
+        var skip = FlxG.keys.anyPressed([X]);
+        if (skip) {
+            resetAnim();
+        }
+        super.update(elapsed);
+    }
 }

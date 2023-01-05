@@ -66,52 +66,18 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 
 	override function update(elapsed:Float)
 	{
-		var interact = FlxG.keys.anyJustPressed([Z, ENTER]);
+		var interact = FlxG.keys.anyJustPressed([SPACE, G]);
 
-		if (FlxG.overlap(PlayState.frisk, sans)) {
-			dialogueActive_1 = true;
-		}else{
-			if(dialogueActive_1 == true) {
-				dialogueActive_1 = false;
-			}
+		var dialog:Array<String> = ["sex", "boobs", "porn"];
+		if (interact) {
+			playDialogue('papyrus','default',dialog, 0.2);
 		}
-		if (interact && !dialogueActive_1 && dialogue_1) {
-			Dialogue.removeDialogue();
-		}
-		if (interact && dialogueActive_1) {
-			dialogueLine_1 += 1;
-		}
-		if (interact && dialogueLine_1 < 1 && dialogueActive_1) { 
-			dialogue_1 = true;
-			playDialogue('sans','default','hey kid.', 0.05);
-		}
-		if (interact && dialogueLine_1 == 1 && dialogueActive_1) {
-			Dialogue.removeDialogue();
-			playDialogue('sans','default','uh sorry this is a demo.', 0.05);
-		}
-		if (interact && dialogueLine_1 == 2 && dialogueActive_1) {
-			Dialogue.removeDialogue();
-			playDialogue('sans','default','so uh-', 0.035);
-		}	
-		if (interact && dialogueLine_1 == 3 && dialogueActive_1) {
-			Dialogue.removeDialogue();
-			playDialogue('papyrus','default','its not done sans.', 0.05);
-		}	
-		if (interact && dialogueLine_1 == 4 && dialogueActive_1) {
-			Player.movement = true;
-			Player.playAnimation = true;
-			dialogue_1 = false;
-			Dialogue.removeDialogue();
-			dialogueLine_1 = -1;
-		}
+
 		super.update(elapsed);
 	}
 
-	public function playDialogue(character:String, mood:String, text:String, speed:Float) {
-		Player.movement = false;
-		Player.playAnimation = false;
-		var currentDialog:Dialogue = new Dialogue(character, mood, '* ' + text, speed);
+	public function playDialogue(character:String, mood:String, text:Array<String>, speed:Float) {
+		var currentDialog:Dialogue = new Dialogue(character, mood, text, speed);
 		add(currentDialog);
-		Dialogue.dialog_text.start(null, true, false, null);
 	}
 }

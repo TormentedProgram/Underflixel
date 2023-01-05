@@ -29,6 +29,7 @@ class PlayState extends FlxState
 
 	public static var frisk:Player;
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
+	var shader:Shaders.GameplayShader;
 
 	override public function create()
 	{
@@ -52,6 +53,10 @@ class PlayState extends FlxState
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
+
+		shader = new Shaders.GameplayShader();
+		//camHUD.setFilters([new ShaderFilter(shader)]);
+		//camGame.setFilters([new ShaderFilter(shader)]);
 		
 		levelCollision = new FlxGroup();
 		playerCollision = new FlxGroup();
@@ -76,6 +81,8 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float)
 	{
+		shader.iTime.value[0] += elapsed;
+
 		#if debug
 		FlxG.watch.addMouse();
 		if (FlxG.keys.justPressed.SEVEN) {
