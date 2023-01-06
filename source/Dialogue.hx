@@ -22,9 +22,10 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	public static var dialog_box:FlxSprite;
 	public static var head:DialogHead;
 	public static var dialog_text:FlxTypeText;
-	public static var speed:Float;
+	public var speed:Float;
 	public static var character:String = null;
 	public static var stopTalking:FlxTimer;
+	public static var inDialogue:Bool;
     var lines:Array<String>;
     var currentLine:Int;
 
@@ -34,6 +35,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 
 		lines = text;
         currentLine = 0;
+		this.speed = speed;
 
 		Player.movement = false;
 		Player.playAnimation = false;
@@ -52,11 +54,6 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		head.cameras = [PlayState.camHUD];
 		add(head);
 
-		stopTalking = new FlxTimer().start(speed * lines[currentLine].length, function(tmr:FlxTimer)
-			{
-				head.resetAnim();
-			});
-
 		dialog_text = new FlxTypeText(dialog_box.x + 100, dialog_box.y, FlxG.width - 30, lines[0], 32, true);
 		dialog_text.setFormat(Paths.font("fonts/" + character), 40);
 		dialog_text.bold = true;
@@ -70,6 +67,12 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		];
 		add(dialog_text);
 		dialog_text.start(null, true, false, null);
+		inDialogue = true;
+
+		dialog_text.completeCallback = function()
+			{
+				head.resetAnim();
+			}
 	}
 
 	override function update(elapsed:Float)
@@ -79,15 +82,15 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 			trace(currentLine);
 			if(currentLine >= lines.length) {
 				removeDialogue();
-                currentLine = 0;
-            }
-			dialog_text.resetText(lines[currentLine]);
-			dialog_text.start(null, true, false, null);
-			head.startAnim();
-			stopTalking = new FlxTimer().start(speed * lines[currentLine].length, function(tmr:FlxTimer)
-				{
-					head.resetAnim();
-				});
+            }else{
+				dialog_text.resetText(lines[currentLine]);
+				dialog_text.start(speed, true, false, null);
+				head.startAnim();
+				dialog_text.completeCallback = function()
+					{
+						head.resetAnim();
+					}
+			}
 		}
 		super.update(elapsed);
 		dialog_text.update(elapsed);
@@ -95,11 +98,9 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 
 	function removeDialogue() {
 		currentLine = 0;
-		dialog_text.kill();
-		dialog_box.kill();
-		head.kill();
-
-		Player.movement = true;
+		inDialogue = false;
+		kill();
+		Player.movement = true;	
 		Player.playAnimation = true;
 	}
 }
@@ -122,6 +123,7 @@ class DialogHead extends FlxSprite
     }
 
     public function resetAnim() {
+		trace('worked?');
         animation.play('idle');
     }
 

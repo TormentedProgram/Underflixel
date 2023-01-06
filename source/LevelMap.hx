@@ -68,16 +68,18 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 	{
 		var interact = FlxG.keys.anyJustPressed([SPACE, G]);
 
-		var dialog:Array<String> = ["sex", "boobs", "porn"];
+		var dialog:Array<String> = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit", "Quisque vulputate, ligula id tempor gravida, nulla risus sagittis elit", " non semper orci tellus quis tortor"];
 		if (interact) {
-			playDialogue('papyrus','default',dialog, 0.2);
+			playDialogue('papyrus','default',dialog, 0.05);
 		}
 
 		super.update(elapsed);
 	}
 
 	public function playDialogue(character:String, mood:String, text:Array<String>, speed:Float) {
-		var currentDialog:Dialogue = new Dialogue(character, mood, text, speed);
-		add(currentDialog);
+		if (!Dialogue.inDialogue) {
+			var currentDialog:Dialogue = new Dialogue(character, mood, text, speed);
+			add(currentDialog);
+		}
 	}
 }
