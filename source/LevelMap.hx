@@ -64,19 +64,23 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 		}
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float)	
 	{
 		var interact = FlxG.keys.anyJustPressed([SPACE, G]);
-
-		var dialog:Array<String> = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit", "Quisque vulputate, ligula id tempor gravida, nulla risus sagittis elit", " non semper orci tellus quis tortor"];
+		
+		var dialog_speed:Array<Float> = [0.1, 0.2, 0.2];
+		var dialog_moods:Array<String> = ["default", "default", "test"];
+		var dialog_characters:Array<String> = ["papyrus", "sans", "sans"];
+		var dialog_text:Array<String> = ["hey sans you suck!", "that's not very nice", "im now sans.exe"];
+		
 		if (interact) {
-			playDialogue('papyrus','default',dialog, 0.05);
+			playDialogue(dialog_characters, dialog_moods, dialog_text, dialog_speed);
 		}
 
 		super.update(elapsed);
 	}
 
-	public function playDialogue(character:String, mood:String, text:Array<String>, speed:Float) {
+	public function playDialogue(character:Array<String>, mood:Array<String>, text:Array<String>, speed:Array<Float>) {
 		if (!Dialogue.inDialogue) {
 			var currentDialog:Dialogue = new Dialogue(character, mood, text, speed);
 			add(currentDialog);

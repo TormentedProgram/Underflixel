@@ -22,20 +22,23 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	public static var dialog_box:FlxSprite;
 	public static var head:DialogHead;
 	public static var dialog_text:FlxTypeText;
-	public var speed:Float;
-	public static var character:String = null;
 	public static var stopTalking:FlxTimer;
+	public var character:Array<String> = ["sans"];
+	public var speed:Array<Float> = [0.1];
+	public var mood:Array<String> = ["default"];
 	public static var inDialogue:Bool;
     var lines:Array<String>;
     var currentLine:Int;
 
-	public function new(character:String, mood:String, text:Array<String>, speed:Float)
+	public function new(character:Array<String>, mood:Array<String>, text:Array<String>, speed:Array<Float>)
 	{
 		super();
 
 		lines = text;
         currentLine = 0;
 		this.speed = speed;
+		this.character = character;
+		this.mood = mood;
 
 		Player.movement = false;
 		Player.playAnimation = false;
@@ -48,22 +51,22 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		dialog_box.cameras = [PlayState.camHUD];
 		add(dialog_box);
 
-		head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed * 400), character, mood);
+		head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[0] * 400), character[0], mood[0]);
 		head.scrollFactor.set();
 		head.antialiasing = false;
 		head.cameras = [PlayState.camHUD];
 		add(head);
 
 		dialog_text = new FlxTypeText(dialog_box.x + 100, dialog_box.y, FlxG.width - 30, lines[0], 32, true);
-		dialog_text.setFormat(Paths.font("fonts/" + character), 40);
+		dialog_text.setFormat(Paths.font("fonts/" + character[0]), 40);
 		dialog_text.bold = true;
 		dialog_text.scrollFactor.set();
 		dialog_text.skipKeys = ["X"];
 		dialog_text.autoErase = false;
-		dialog_text.delay = speed;
+		dialog_text.delay = speed[0];
 		dialog_text.cameras = [PlayState.camHUD];
 		dialog_text.sounds = [
-			FlxG.sound.load(Paths.sound('sounds/' + character)),
+			FlxG.sound.load(Paths.sound('sounds/' + character[0])),
 		];
 		add(dialog_text);
 		dialog_text.start(null, true, false, null);
@@ -83,8 +86,18 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 			if(currentLine >= lines.length) {
 				removeDialogue();
             }else{
+				remove(head);
+				head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[currentLine] * 400), character[currentLine], mood[currentLine]);
+				head.scrollFactor.set();
+				head.antialiasing = false;
+				head.cameras = [PlayState.camHUD];
+				add(head);
 				dialog_text.resetText(lines[currentLine]);
-				dialog_text.start(speed, true, false, null);
+				dialog_text.setFormat(Paths.font("fonts/" + character[currentLine]), 40);
+				dialog_text.sounds = [
+					FlxG.sound.load(Paths.sound('sounds/' + character[currentLine])),
+				];
+				dialog_text.start(speed[currentLine], true, false, null);
 				head.startAnim();
 				dialog_text.completeCallback = function()
 					{
