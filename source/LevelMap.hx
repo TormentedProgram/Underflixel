@@ -65,11 +65,11 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 	}
 
 	override function update(elapsed:Float)	
-	{
+	{	
 		var interact = FlxG.keys.anyJustPressed([SPACE, G]);
-		
-		var dialog_speed:Array<Float> = [0.1, 0.2, 0.2];
-		var dialog_moods:Array<String> = ["default", "default", "test"];
+
+		var dialog_speed:Array<Float> = [0.1, 0.3, 0.3];
+		var dialog_moods:Array<String> = ["default", "default", "default"];
 		var dialog_characters:Array<String> = ["papyrus", "sans", "sans"];
 		var dialog_text:Array<String> = ["hey sans you suck!", "that's not very nice", "im now sans.exe"];
 		

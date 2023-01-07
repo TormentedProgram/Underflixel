@@ -51,7 +51,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		dialog_box.cameras = [PlayState.camHUD];
 		add(dialog_box);
 
-		head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[0] * 400), character[0], mood[0]);
+		head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[0] * 10 * 4), character[0], mood[0]);
 		head.scrollFactor.set();
 		head.antialiasing = false;
 		head.cameras = [PlayState.camHUD];
@@ -87,7 +87,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 				removeDialogue();
             }else{
 				remove(head);
-				head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[currentLine] * 400), character[currentLine], mood[currentLine]);
+				head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[currentLine] * 10 * 4), character[currentLine], mood[currentLine]);
 				head.scrollFactor.set();
 				head.antialiasing = false;
 				head.cameras = [PlayState.camHUD];
@@ -125,8 +125,8 @@ class DialogHead extends FlxSprite
         super(x, y);
 
         frames = Paths.getSparrowAtlas('images/dialogue/' + character + '/' + character + '-' + mood);
-        animation.addByPrefix('talk', 'talk0', frameRate, true);
-        animation.addByPrefix('idle', 'talk0003', frameRate, true);
+        animation.addByPrefix('talk', 'talk0', 16 - frameRate, true);
+        animation.addByPrefix('idle', 'talk0003', 16 - frameRate, true);
 
         setGraphicSize(Std.int(width * scale));
         updateHitbox();
