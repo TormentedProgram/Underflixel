@@ -57,6 +57,11 @@ class Paths
 		return getAsset(file + '.png', library);
 	}
 
+	inline static public function rawSearch(file:String, ?library:String):String
+	{
+		return getAsset(file, library);
+	}
+
 	inline static public function sound(file:String, ?library:String):String
 	{
 		return getAsset(file + '.ogg', library);

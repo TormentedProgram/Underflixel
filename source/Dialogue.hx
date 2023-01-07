@@ -12,6 +12,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
+import openfl.utils.Assets as OpenFlAssets;
 import flixel.addons.text.FlxTypeText;
 import flixel.util.FlxTimer;
 import PlayState;
@@ -120,13 +121,21 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 
 class DialogHead extends FlxSprite
 {
+	var animated:Bool;
     public function new(x:Float, y:Float, scale:Float, frameRate:Int, character:String, mood:String)
     {
         super(x, y);
 
-        frames = Paths.getSparrowAtlas('images/dialogue/' + character + '/' + character + '-' + mood);
-        animation.addByPrefix('talk', 'talk0', 16 - frameRate, true);
-        animation.addByPrefix('idle', 'talk0003', 16 - frameRate, true);
+		var file:String = Paths.rawSearch('images/dialogue/' + character + '/' + character + '-' + mood + '.xml');
+		if (OpenFlAssets.exists(file)) {
+			animated = true;
+			frames = Paths.getSparrowAtlas('images/dialogue/' + character + '/' + character + '-' + mood);
+			animation.addByPrefix('talk', 'talk0', 16 - frameRate, true);
+			animation.addByPrefix('idle', 'talk0003', 16 - frameRate, true);
+		}else{
+			animated = false;
+			loadGraphic(Paths.image('images/dialogue/' + character + '/' + character + '-' + mood));
+		}
 
         setGraphicSize(Std.int(width * scale));
         updateHitbox();
@@ -136,12 +145,15 @@ class DialogHead extends FlxSprite
     }
 
     public function resetAnim() {
-		trace('worked?');
-        animation.play('idle');
+		if (animated) {
+			animation.play('idle');
+		}
     }
 
 	public function startAnim() {
-        animation.play('talk');
+		if (animated) {
+			animation.play('talk');
+		}
     }
 
     override function update(elapsed:Float)
