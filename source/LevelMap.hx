@@ -71,7 +71,7 @@ class Level1 extends FlxTypedGroup<FlxBasic>
 		var dialog_speed:Array<Float> = [0.1, 0.1, 0.1];
 		var dialog_moods:Array<String> = ["default", "default", "default"];
 		var dialog_characters:Array<String> = ["papyrus", "boyfriend", "papyrus"];
-		var dialog_text:Array<String> = ["hey sans you suck!", "that's not very nice", "im now sans.exe"];
+		var dialog_text:Array<String> = ["* you're a bitch", "that's not nice :(", "* shutup you smell"];
 		
 		if (interact) {
 			playDialogue(dialog_characters, dialog_moods, dialog_text, dialog_speed);

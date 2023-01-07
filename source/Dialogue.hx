@@ -92,9 +92,9 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 			switch (character[currentLine])
 			{
 				case 'boyfriend':
-					textDistance = 250;
-					flipped = true;
-					xOffset = 50;
+					textDistance = -520;
+					flipped = false;
+					xOffset = -450;
 					yOffset = 0;
 					scale = 1.5;
 					pixelated = false;
