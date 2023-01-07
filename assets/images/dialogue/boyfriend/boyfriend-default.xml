@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="boyfriend-default.png">
+	<!-- Created with Adobe Animate version 23.0.0.407 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="idle0000" x="318" y="0" width="149" height="96"/>
+	<SubTexture name="talk0000" x="0" y="0" width="149" height="96"/>
+	<SubTexture name="talk0001" x="159" y="0" width="149" height="96"/>
+	<SubTexture name="talk0002" x="318" y="0" width="149" height="96"/>
+</TextureAtlas>

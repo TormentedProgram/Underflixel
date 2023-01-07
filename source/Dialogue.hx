@@ -28,6 +28,12 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	public var speed:Array<Float> = [0.1];
 	public var mood:Array<String> = ["default"];
 	public static var inDialogue:Bool;
+	var xOffset:Float = 70;
+	var yOffset:Float = 0;
+	var textDistance:Float = 180;
+	var pixelated:Bool = true;
+	var flipped:Bool = false;
+	var scale:Float = 1.5;
     var lines:Array<String>;
     var currentLine:Int;
 
@@ -37,7 +43,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 
 		lines = text;
         currentLine = 0;
-		this.speed = speed;
+		this.speed = speed;	
 		this.character = character;
 		this.mood = mood;
 
@@ -52,13 +58,13 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 		dialog_box.cameras = [PlayState.camHUD];
 		add(dialog_box);
 
-		head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[0] * 10 * 4), character[0], mood[0]);
+		head = new DialogHead(dialog_box.x - xOffset, dialog_box.y - yOffset, scale, Std.int(speed[0] * 10 * 4), character[0], mood[0], flipped, !pixelated);
 		head.scrollFactor.set();
-		head.antialiasing = false;
+		head.antialiasing = !pixelated;
 		head.cameras = [PlayState.camHUD];
 		add(head);
 
-		dialog_text = new FlxTypeText(dialog_box.x + 100, dialog_box.y, FlxG.width - 30, lines[0], 32, true);
+		dialog_text = new FlxTypeText(head.x + textDistance, dialog_box.y, FlxG.width - 30, lines[0], 32, true);
 		dialog_text.setFormat(Paths.font("fonts/" + character[0]), 40);
 		dialog_text.bold = true;
 		dialog_text.scrollFactor.set();
@@ -83,17 +89,34 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 	{
 		if (FlxG.keys.anyJustPressed([Z, ENTER])) {
 			currentLine++;
-			trace(currentLine);
+			switch (character[currentLine])
+			{
+				case 'boyfriend':
+					textDistance = 250;
+					flipped = true;
+					xOffset = 50;
+					yOffset = 0;
+					scale = 1.5;
+					pixelated = false;
+				default:
+					textDistance = 180;
+					flipped = false;
+					xOffset = 70;
+					yOffset = 0;
+					scale = 1.5;
+					pixelated = true;
+			}
 			if(currentLine >= lines.length) {
 				removeDialogue();
             }else{
 				remove(head);
-				head = new DialogHead(dialog_box.x - 70, dialog_box.y, 1.5, Std.int(speed[currentLine] * 10 * 4), character[currentLine], mood[currentLine]);
+				head = new DialogHead(dialog_box.x - xOffset, dialog_box.y - yOffset, scale, Std.int(speed[currentLine] * 10 * 4), character[currentLine], mood[currentLine], flipped, !pixelated);
 				head.scrollFactor.set();
-				head.antialiasing = false;
+				head.antialiasing = !pixelated;
 				head.cameras = [PlayState.camHUD];
 				add(head);
 				dialog_text.resetText(lines[currentLine]);
+				dialog_text.x = head.x + textDistance;
 				dialog_text.setFormat(Paths.font("fonts/" + character[currentLine]), 40);
 				dialog_text.sounds = [
 					FlxG.sound.load(Paths.sound('sounds/' + character[currentLine])),
@@ -122,7 +145,7 @@ class Dialogue extends FlxTypedGroup<FlxBasic>
 class DialogHead extends FlxSprite
 {
 	var animated:Bool;
-    public function new(x:Float, y:Float, scale:Float, frameRate:Int, character:String, mood:String)
+    public function new(x:Float, y:Float, scale:Float, frameRate:Int, character:String, mood:String, flip:Bool, pixelated:Bool)
     {
         super(x, y);
 
@@ -131,7 +154,7 @@ class DialogHead extends FlxSprite
 			animated = true;
 			frames = Paths.getSparrowAtlas('images/dialogue/' + character + '/' + character + '-' + mood);
 			animation.addByPrefix('talk', 'talk0', 16 - frameRate, true);
-			animation.addByPrefix('idle', 'talk0003', 16 - frameRate, true);
+			animation.addByPrefix('idle', 'idle0', 16 - frameRate, true);
 		}else{
 			animated = false;
 			loadGraphic(Paths.image('images/dialogue/' + character + '/' + character + '-' + mood));
@@ -139,7 +162,8 @@ class DialogHead extends FlxSprite
 
         setGraphicSize(Std.int(width * scale));
         updateHitbox();
-        antialiasing = false;
+		flipX = flip;
+        antialiasing = !pixelated;
 
         animation.play('talk');
     }
