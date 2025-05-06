@@ -55,8 +55,7 @@ class PlayState extends FlxState
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		shader = new Shaders.GameplayShader();
-		//camHUD.setFilters([new ShaderFilter(shader)]);
-		//camGame.setFilters([new ShaderFilter(shader)]);
+		camGame.filters = [new ShaderFilter(shader)];
 		
 		levelCollision = new FlxGroup();
 		playerCollision = new FlxGroup();
